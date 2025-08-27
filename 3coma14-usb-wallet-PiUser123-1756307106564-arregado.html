@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3coma14 USB Wallet Installer - PiUser123</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .qr-code { 
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23000"/><rect x="10" y="10" width="10" height="10" fill="%23fff"/><rect x="30" y="10" width="10" height="10" fill="%23fff"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold text-gray-900">3coma14 USB Wallet</h1>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Connected</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="connectUSB" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Connect USB Device
+                        </button>
+                        <button id="networkSwitch" class="bg-gray-600 text-white px-3 py-2 rounded-lg">
+                            TESTNET
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+<!-- Visible Installation Instructions -->
+<div class="max-w-7xl mx-auto px-4 py-6">
+  <div class="bg-yellow-100 border-l-4 border-yellow-500 p-4 rounded-lg mb-6">
+    <h2 class="text-lg font-bold text-yellow-800">🛠 Cómo instalar tu USB Wallet</h2>
+    <ol class="list-decimal list-inside mt-2 text-gray-700 space-y-1">
+      <li>Haz clic en <strong>“Download .BAT Installer”</strong> para descargar el instalador.</li>
+      <li>Ejecuta el archivo descargado con doble clic.</li>
+      <li>Conecta tu USB cuando se te indique.</li>
+      <li>Tu wallet se instalará en <code>%USERPROFILE%\3coma14</code>.</li>
+    </ol>
+  </div>
+
+  <!-- Copiable .BAT Script -->
+  <div class="bg-gray-100 p-4 rounded-lg">
+    <h3 class="font-semibold text-gray-800 mb-2">📄 Contenido del archivo .BAT</h3>
+    <pre class="bg-white p-3 rounded border text-sm overflow-auto">
+@echo off
+echo Installing 3coma14 USB Wallet...
+
+echo.
+echo Creating directories...
+mkdir "%USERPROFILE%\3coma14"
+mkdir "%USERPROFILE%\3coma14\wallet"
+mkdir "%USERPROFILE%\3coma14\images"
+mkdir "%USERPROFILE%\3coma14\transactions"
+
+echo.
+echo Copying wallet files...
+copy "%~dp0\*" "%USERPROFILE%\3coma14\"
+
+echo.
+echo Setting up USB drivers...
+echo Please connect your 3coma14 USB device
+pause
+
+echo.
+echo Installation complete!
+echo Your wallet is ready at: %USERPROFILE%\3coma14
+pause
+    </pre>
+  </div>
+</div>
+
+        <!-- User Profile Section -->
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex items-center space-x-6">
+                    <img src="/api/placeholder/150/150?text=P" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900">PiUser123</h2>
+                        <p class="text-gray-600">Pi Network Wallet</p>
+                        <div class="mt-2 flex items-center space-x-4">
+                            <span class="text-3xl font-bold text-green-600">1,234.56 PI</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                                TESTNET
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="qr-code w-24 h-24 border-2 border-gray-300 rounded-lg mb-2"></div>
+                        <p class="text-xs text-gray-500">Wallet QR</p>
+                    </div>
+                </div>
+                
+                <!-- Wallet Address -->
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Wallet Address</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" value="GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ" readonly 
+                               class="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg font-mono text-sm">
+                        <button onclick="copyToClipboard('GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ')" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Copy</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Minted Images Gallery -->
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">Minted Images Gallery</h3>
+                <div class="grid grid-cols-3 md:grid-cols-6 gap-4">
+                    
+                        <div class="relative group cursor-pointer">
+                            <img src="/api/placeholder/200/200?text=NFT1" alt="NFT 1" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">NFT #1</span>
+                            </div>
+                        </div>
+                    
+                        <div class="relative group cursor-pointer">
+                            <img src="/api/placeholder/200/200?text=NFT2" alt="NFT 2" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">NFT #2</span>
+                            </div>
+                        </div>
+                    
+                        <div class="relative group cursor-pointer">
+                            <img src="/api/placeholder/200/200?text=NFT3" alt="NFT 3" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+                            <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+                                <span class="text-white text-sm">NFT #3</span>
+                            </div>
+                        </div>
+                    
+                </div>
+            </div>
+
+            <!-- Transaction Management -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Send Transaction -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Send Pi</h3>
+                    <div class="space-y-4">
+                        <input type="number" id="sendAmount" placeholder="Amount (PI)" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="sendAddress" placeholder="Recipient Address" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <div class="flex space-x-2">
+                            <button onclick="createTransaction()" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                                Create
+                            </button>
+                            <button onclick="signTransaction()" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                                Sign
+                            </button>
+                            <button onclick="denyTransaction()" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                Deny
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Security</h3>
+                    <div class="space-y-4">
+                        <input type="password" id="newPassword" placeholder="Create New Password" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <button onclick="createPassword()" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">
+                            Create Password
+                        </button>
+                        <button onclick="generateQR()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+                            Generate QR Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Transaction History</h3>
+                    <div class="space-x-2">
+                        <button onclick="loadTransactions()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                            Load
+                        </button>
+                        <button onclick="saveTransactions()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Save
+                        </button>
+                    </div>
+                </div>
+                <div id="transactionList" class="space-y-2">
+                    
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_0</span>
+                                <span class="text-sm text-gray-600">100.00 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_1</span>
+                                <span class="text-sm text-gray-600">50.00 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_2</span>
+                                <span class="text-sm text-gray-600">25.50 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Scripts and Data -->
+    <script>
+        // Embedded user data
+        const userData = {
+  "username": "PiUser123",
+  "balance": "1,234.56",
+  "walletAddress": "GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ",
+  "network": "testnet"
+};
+        
+        // USB Connection via WebUSB API
+        async function connectUSBDevice() {
+            try {
+                if ('usb' in navigator) {
+                    const device = await navigator.usb.requestDevice({
+                        filters: [{ vendorId: 0x1234 }] // 3coma14 vendor ID
+                    });
+                    
+                    await device.open();
+                    await device.selectConfiguration(1);
+                    await device.claimInterface(0);
+                    
+                    console.log('3coma14 USB device connected:', device);
+                    document.getElementById('connectUSB').textContent = '✓ USB Connected';
+                    document.getElementById('connectUSB').className = 'bg-green-600 text-white px-4 py-2 rounded-lg';
+                    
+                    // Sync wallet data with USB device
+                    await syncWalletData(device);
+                    
+                } else {
+                    alert('WebUSB not supported in this browser');
+                }
+            } catch (error) {
+                console.error('USB connection failed:', error);
+                alert('Failed to connect USB device: ' + error.message);
+            }
+        }
+        
+        async function syncWalletData(device) {
+            try {
+                // Send wallet data to USB device
+                const data = new TextEncoder().encode(JSON.stringify(userData));
+                await device.transferOut(1, data);
+                console.log('Wallet data synced to USB device');
+            } catch (error) {
+                console.error('Sync failed:', error);
+            }
+        }
+        
+        // Transaction Management
+        let pendingTransaction = null;
+        
+        function createTransaction() {
+            const amount = document.getElementById('sendAmount').value;
+            const address = document.getElementById('sendAddress').value;
+            
+            if (!amount || !address) {
+                alert('Please enter amount and recipient address');
+                return;
+            }
+            
+            pendingTransaction = {
+                id: 'tx_' + Date.now(),
+                amount: amount,
+                to: address,
+                from: userData.walletAddress,
+                network: userData.network,
+                status: 'pending',
+                created: new Date().toISOString()
+            };
+            
+            alert('Transaction created: ' + pendingTransaction.id);
+            console.log('Created transaction:', pendingTransaction);
+        }
+        
+        function signTransaction() {
+            if (!pendingTransaction) {
+                alert('No pending transaction to sign');
+                return;
+            }
+            
+            pendingTransaction.status = 'signed';
+            pendingTransaction.signed = new Date().toISOString();
+            
+            // Add to transaction history
+            const txList = document.getElementById('transactionList');
+            const txElement = document.createElement('div');
+            txElement.className = 'flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200';
+            txElement.innerHTML = `
+                <span class="font-mono text-sm">${pendingTransaction.id}</span>
+                <span class="text-sm text-green-600">${pendingTransaction.amount} PI</span>
+                <span class="text-xs text-green-500">Signed</span>
+            `;
+            txList.insertBefore(txElement, txList.firstChild);
+            
+            alert('Transaction signed and ready to broadcast');
+            pendingTransaction = null;
+        }
+        
+        function denyTransaction() {
+            if (!pendingTransaction) {
+                alert('No pending transaction to deny');
+                return;
+            }
+            
+            alert('Transaction denied: ' + pendingTransaction.id);
+            pendingTransaction = null;
+        }
+        
+        function loadTransactions() {
+            // Load transactions from localStorage or USB device
+            const saved = localStorage.getItem('3coma14_transactions');
+            if (saved) {
+                const transactions = JSON.parse(saved);
+                console.log('Loaded transactions:', transactions);
+                alert('Loaded ' + transactions.length + ' transactions');
+            } else {
+                alert('No saved transactions found');
+            }
+        }
+        
+        function saveTransactions() {
+            // Save current transactions to localStorage
+            const txElements = document.querySelectorAll('#transactionList > div');
+            const transactions = Array.from(txElements).map(el => ({
+                hash: el.querySelector('.font-mono').textContent,
+                amount: el.querySelector('.text-sm').textContent,
+                date: new Date().toISOString()
+            }));
+            
+            localStorage.setItem('3coma14_transactions', JSON.stringify(transactions));
+            alert('Transactions saved successfully');
+        }
+        
+        // Security Functions
+        function createPassword() {
+            const password = document.getElementById('newPassword').value;
+            if (!password) {
+                alert('Please enter a password');
+                return;
+            }
+            
+            // Hash and store password
+            const hashedPassword = btoa(password); // Simple encoding for demo
+            localStorage.setItem('3coma14_password', hashedPassword);
+            alert('Password created successfully');
+            document.getElementById('newPassword').value = '';
+        }
+        
+        function generateQR() {
+            // Generate QR code for wallet address
+            const qrData = `pi://${userData.walletAddress}?amount=0&memo=3coma14_wallet`;
+            console.log('QR Code data:', qrData);
+            alert('QR Code generated for wallet address');
+        }
+        
+        // Network Switching
+        function switchNetwork() {
+            const currentNetwork = userData.network;
+            const newNetwork = currentNetwork === 'testnet' ? 'mainnet' : 'testnet';
+            userData.network = newNetwork;
+            
+            document.getElementById('networkSwitch').textContent = newNetwork.toUpperCase();
+            alert('Switched to ' + newNetwork.toUpperCase());
+        }
+        
+        // Utility Functions
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Address copied to clipboard!');
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+        
+        // Event Listeners
+        document.getElementById('connectUSB').addEventListener('click', connectUSBDevice);
+        document.getElementById('networkSwitch').addEventListener('click', switchNetwork);
+        
+        // Auto-connect on load
+        window.addEventListener('load', () => {
+            console.log('3coma14 USB Wallet Installer loaded');
+            console.log('User data:', userData);
+            
+            // Auto-detect USB devices
+            if ('usb' in navigator) {
+                navigator.usb.getDevices().then(devices => {
+                    console.log('USB devices found:', devices.length);
+                });
+            }
+        });
+        
+        // Batch file content for Windows installation
+        const batchFileContent = `@echo off
+echo Installing 3coma14 USB Wallet...
+echo.
+echo Creating directories...
+mkdir "%USERPROFILE%\3coma14"
+mkdir "%USERPROFILE%\3coma14\wallet"
+mkdir "%USERPROFILE%\3coma14\images"
+mkdir "%USERPROFILE%\3coma14\transactions"
+echo.
+echo Copying wallet files...
+copy "%~dp0\*" "%USERPROFILE%\3coma14\"
+echo.
+echo Setting up USB drivers...
+echo Please connect your 3coma14 USB device
+pause
+echo.
+echo Installation complete!
+echo Your wallet is ready at: %USERPROFILE%\3coma14
+pause
+`;
+        
+        // Download batch installer
+        function downloadBatchInstaller() {
+            const blob = new Blob([batchFileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '3coma14-install.bat';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Add download button
+        const downloadBtn = document.createElement('button');
+        downloadBtn.textContent = 'Download .BAT Installer';
+        downloadBtn.className = 'bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 ml-2';
+        downloadBtn.onclick = downloadBatchInstaller;
+        document.querySelector('header .flex.items-center.space-x-4').appendChild(downloadBtn);
+    </script>
+</body>
+</html>
