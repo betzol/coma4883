@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3coma14 USB Wallet Installer - PiUser123456789-copilot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        .qr-code { 
+            background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><rect width="100" height="100" fill="%23000"/><rect x="10" y="10" width="10" height="10" fill="%23fff"/><rect x="30" y="10" width="10" height="10" fill="%23fff"/></svg>') no-repeat center;
+            background-size: contain;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="min-h-screen">
+        <!-- Header -->
+        <header class="bg-white shadow-sm border-b">
+            <div class="max-w-7xl mx-auto px-4 py-4">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-2xl font-bold text-gray-900">3coma14 USB Wallet</h1>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-sm">Connected</span>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <button id="connectUSB" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Connect USB Device
+                        </button>
+                        <button id="networkSwitch" class="bg-gray-600 text-white px-3 py-2 rounded-lg">
+                            TESTNET
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+<input type="file" id="nftUploader" accept=".json" class="hidden" />
+<button onclick="document.getElementById('nftUploader').click()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+  Upload NFT to USB
+</button>
+<span id="username">Cargando...</span>
+<span id="walletBalance">Cargando...</span>     <!-- Balance del perfil -->
+<span id="networkLabel">TESTNET</span>          <!-- Red activa -->
+<span id="galleryBalance">0 PI</span>           <!-- Balance de NFTs -->
+<div class="grid grid-cols-3 md:grid-cols-6 gap-4"></div> <!-- Galería -->
+<!--button onclick="loadNFTsFromUSB()" class="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700 mt-4">
+  Cargar NFTs desde USB
+</button-->
+
+
+        <!-- User Profile Section -->
+        <div class="max-w-7xl mx-auto px-4 py-6">
+            <div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+                <div class="flex items-center space-x-6">
+                    <img src="/api/placeholder/150/150?text=P" alt="Profile" class="w-24 h-24 rounded-full border-4 border-blue-500">
+                    <div class="flex-1">
+                        <h2 class="text-2xl font-bold text-gray-900">PiUser123</h2>
+                        <p class="text-gray-600">Pi Network Wallet</p>
+                        <div class="mt-2 flex items-center space-x-4">
+                            <span class="text-3xl font-bold text-green-600">1,224.56 PI</span>
+                            <span class="bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm">
+                                TESTNET
+                            </span>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <div class="qr-code w-24 h-24 border-2 border-gray-300 rounded-lg mb-2"></div>
+                        <p class="text-xs text-gray-500">Wallet QR</p>
+                    </div>
+                </div>
+                
+                <!-- Wallet Address -->
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg">
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Wallet Address</label>
+                    <div class="flex items-center space-x-2">
+                        <input type="text" value="GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ" readonly 
+                               class="flex-1 px-3 py-2 bg-white border border-gray-300 rounded-lg font-mono text-sm">
+                        <button onclick="copyToClipboard('GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ')" 
+                                class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">Copy</button>
+                    </div>
+                </div>
+            </div>
+<span id="walletBalance">Cargando...</span> <!-- Balance del perfil -->
+<span id="galleryBalance">0 PI</span>       <!-- Balance de la galería -->
+<div class="grid grid-cols-3"></div>        <!-- Galería de NFTs -->
+
+          <!-- Minted Images Gallery -->
+<div class="bg-white rounded-lg shadow-lg p-6 mb-6">
+  <h3 class="text-lg font-semibold text-gray-900 mb-4">Minted Images Gallery</h3>
+  <div class="grid grid-cols-3 md:grid-cols-6 gap-4"></div>
+</div>
+
+            <!-- Transaction Management -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+                <!-- Send Transaction -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Send Pi</h3>
+                    <div class="space-y-4">
+                        <input type="number" id="sendAmount" placeholder="Amount (PI)" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <input type="text" id="sendAddress" placeholder="Recipient Address" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <div class="flex space-x-2">
+                            <button onclick="createTransaction()" class="flex-1 bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700">
+                                Create
+                            </button>
+                            <button onclick="signTransaction()" class="flex-1 bg-green-600 text-white py-2 rounded-lg hover:bg-green-700">
+                                Sign
+                            </button>
+                            <button onclick="denyTransaction()" class="flex-1 bg-red-600 text-white py-2 rounded-lg hover:bg-red-700">
+                                Deny
+                            </button>
+<button id="sendButton" onclick="sendTransaction()" style="display:none; background:#4CAF50; color:white; padding:0.5rem 1rem; border:none; border-radius:5px;">
+  Send
+</button>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Security Settings -->
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-lg font-semibold text-gray-900 mb-4">Security</h3>
+                    <div class="space-y-4">
+                        <input type="password" id="newPassword" placeholder="Create New Password" 
+                               class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <button onclick="createPassword()" class="w-full bg-purple-600 text-white py-2 rounded-lg hover:bg-purple-700">
+                            Create Password
+                        </button>
+                        <button onclick="generateQR()" class="w-full bg-indigo-600 text-white py-2 rounded-lg hover:bg-indigo-700">
+                            Generate QR Code
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Transaction History -->
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-900">Transaction History</h3>
+                    <div class="space-x-2">
+                        <button onclick="loadTransactions()" class="bg-gray-600 text-white px-4 py-2 rounded-lg hover:bg-gray-700">
+                            Load
+                        </button>
+                        <button onclick="saveTransactions()" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                            Save
+                        </button>
+                    </div>
+                </div>
+                <div id="transactionList" class="space-y-2">
+                    
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_0</span>
+                                <span class="text-sm text-gray-600">100.00 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_1</span>
+                                <span class="text-sm text-gray-600">50.00 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                            <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                                <span class="font-mono text-sm">tx_2</span>
+                                <span class="text-sm text-gray-600">25.50 PI</span>
+                                <span class="text-xs text-gray-500">Recent</span>
+                            </div>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Embedded Scripts and Data -->
+    <script>
+        // **Embedded user data
+        const userData = {
+  "username": "PiUser123",
+  "balance": "1,224.56",
+  "walletAddress": "GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ",
+  "network": "testnet"
+};**//
+        
+        // USB Connection via WebUSB API
+        // USB Connection via WebUSB API
+async function connectUSBDevice() {
+  try {
+    if ('usb' in navigator) {
+      const device = await navigator.usb.requestDevice({
+        filters: [{ vendorId: 0x1234 }] // 3coma14 vendor ID
+      });
+
+      await device.open();
+      await device.selectConfiguration(1);
+      await device.claimInterface(0);
+
+      console.log('3coma14 USB device connected:', device);
+      document.getElementById('connectUSB').textContent = '✓ USB Connected';
+      document.getElementById('connectUSB').className = 'bg-green-600 text-white px-4 py-2 rounded-lg';
+
+      // Sync wallet data with USB device
+      await syncWalletData(device);
+
+      // Auto-load NFTs from USB
+      await loadNFTsFromUSB();
+
+    } else {
+      alert('WebUSB not supported in this browser');
+    }
+  } catch (error) {
+    console.error('USB connection failed:', error);
+    alert('Failed to connect USB device: ' + error.message);
+  }
+}
+
+async function syncWalletData(device) {
+  try {
+    const data = new TextEncoder().encode(JSON.stringify(userData));
+    await device.transferOut(1, data);
+    console.log('Wallet data synced to USB device');
+  } catch (error) {
+    console.error('Sync failed:', error);
+  }
+}
+
+        // Transaction Management
+        let pendingTransaction = null;
+        
+        function createTransaction() {
+            const amount = document.getElementById('sendAmount').value;
+            const address = document.getElementById('sendAddress').value;
+            
+            if (!amount || !address) {
+                alert('Please enter amount and recipient address');
+                return;
+            }
+            
+            pendingTransaction = {
+                id: 'tx_' + Date.now(),
+                amount: amount,
+                to: address,
+                from: userData.walletAddress,
+                network: userData.network,
+                status: 'pending',
+                created: new Date().toISOString()
+            };
+            
+            alert('Transaction created: ' + pendingTransaction.id);
+            console.log('Created transaction:', pendingTransaction);
+        }
+        
+        function signTransaction() {
+            if (!pendingTransaction) {
+                alert('No pending transaction to sign');
+                return;
+            }
+            
+            pendingTransaction.status = 'signed';
+            pendingTransaction.signed = new Date().toISOString();
+            
+            // Add to transaction history
+            const txList = document.getElementById('transactionList');
+            const txElement = document.createElement('div');
+            txElement.className = 'flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200';
+            txElement.innerHTML = `
+                <span class="font-mono text-sm">${pendingTransaction.id}</span>
+                <span class="text-sm text-green-600">${pendingTransaction.amount} PI</span>
+                <span class="text-xs text-green-500">Signed</span>
+            `;
+            txList.insertBefore(txElement, txList.firstChild);
+            
+            alert('Transaction signed and ready to broadcast');
+            pendingTransaction = null;
+        }
+        
+        function denyTransaction() {
+            if (!pendingTransaction) {
+                alert('No pending transaction to deny');
+                return;
+            }
+            
+            alert('Transaction denied: ' + pendingTransaction.id);
+            pendingTransaction = null;
+        }
+        
+        function loadTransactions() {
+            // Load transactions from localStorage or USB device
+            const saved = localStorage.getItem('3coma14_transactions');
+            if (saved) {
+                const transactions = JSON.parse(saved);
+                console.log('Loaded transactions:', transactions);
+                alert('Loaded ' + transactions.length + ' transactions');
+            } else {
+                alert('No saved transactions found');
+            }
+        }
+        
+        function saveTransactions() {
+            // Save current transactions to localStorage
+            const txElements = document.querySelectorAll('#transactionList > div');
+            const transactions = Array.from(txElements).map(el => ({
+                hash: el.querySelector('.font-mono').textContent,
+                amount: el.querySelector('.text-sm').textContent,
+                date: new Date().toISOString()
+            }));
+            
+            localStorage.setItem('3coma14_transactions', JSON.stringify(transactions));
+            alert('Transactions saved successfully');
+        }
+        
+        // Security Functions
+        function createPassword() {
+            const password = document.getElementById('newPassword').value;
+            if (!password) {
+                alert('Please enter a password');
+                return;
+            }
+            
+            // Hash and store password
+            const hashedPassword = btoa(password); // Simple encoding for demo
+            localStorage.setItem('3coma14_password', hashedPassword);
+            alert('Password created successfully');
+            document.getElementById('newPassword').value = '';
+        }
+        
+        function generateQR() {
+            // Generate QR code for wallet address
+            const qrData = `pi://${userData.walletAddress}?amount=0&memo=3coma14_wallet`;
+            console.log('QR Code data:', qrData);
+            alert('QR Code generated for wallet address');
+        }
+        
+        // Network Switching
+        function switchNetwork() {
+            const currentNetwork = userData.network;
+            const newNetwork = currentNetwork === 'testnet' ? 'mainnet' : 'testnet';
+            userData.network = newNetwork;
+            
+            document.getElementById('networkSwitch').textContent = newNetwork.toUpperCase();
+            alert('Switched to ' + newNetwork.toUpperCase());
+        }
+        
+        // Utility Functions
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                alert('Address copied to clipboard!');
+            }).catch(err => {
+                console.error('Copy failed:', err);
+            });
+        }
+        
+        // Event Listeners
+        document.getElementById('connectUSB').addEventListener('click', connectUSBDevice);
+        document.getElementById('networkSwitch').addEventListener('click', switchNetwork);
+        
+        // Auto-connect on load
+        window.addEventListener('load', () => {
+            console.log('3coma14 USB Wallet Installer loaded');
+            console.log('User data:', userData);
+            
+            // Auto-detect USB devices
+            if ('usb' in navigator) {
+                navigator.usb.getDevices().then(devices => {
+                    console.log('USB devices found:', devices.length);
+                });
+            }
+        });
+        
+        // Batch file content for Windows installation
+        const batchFileContent = `@echo off
+echo Installing 3coma14 USB Wallet...
+echo.
+echo Creating directories...
+mkdir "%USERPROFILE%\3coma14"
+mkdir "%USERPROFILE%\3coma14\wallet"
+mkdir "%USERPROFILE%\3coma14\images"
+mkdir "%USERPROFILE%\3coma14\transactions"
+echo.
+echo Copying wallet files...
+copy "%~dp0\*" "%USERPROFILE%\3coma14\"
+echo.
+echo Setting up USB drivers...
+echo Please connect your 3coma14 USB device
+pause
+echo.
+echo Installation complete!
+echo Your wallet is ready at: %USERPROFILE%\3coma14
+pause
+`;
+        
+        // Download batch installer
+        function downloadBatchInstaller() {
+            const blob = new Blob([batchFileContent], { type: 'text/plain' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = '3coma14-install.bat';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+        
+        // Add download button
+        const downloadBtn = document.createElement('button');
+        downloadBtn.textContent = 'Download .BAT Installer';
+        downloadBtn.className = 'bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 ml-2';
+        downloadBtn.onclick = downloadBatchInstaller;
+        document.querySelector('header .flex.items-center.space-x-4').appendChild(downloadBtn);}
+    </script>
+
+
+<!-- Librería para QR -->
+<script src="https://cdn.jsdelivr.net/npm/qrcodejs/qrcode.min.js"></script>
+
+<script>
+// Embedded user data
+        const userData = {
+  "username": "PiUser123",
+  "balance": "1,234.56",
+  "walletAddress": "GCTP4MXQTRKQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQZQX7RQ",
+  "network": "testnet"
+};
+
+// USB Connection
+async function connectUSBDevice() {
+  try {
+    if ('usb' in navigator) {
+      const device = await navigator.usb.requestDevice({ filters: [] });
+
+      await device.open();
+      await device.selectConfiguration(1);
+      await device.claimInterface(0);
+      const data = new TextEncoder().encode(JSON.stringify(userData));
+      await device.transferOut(1, data);
+      document.getElementById('connectUSB').textContent = '✓ USB Connected';
+      document.getElementById('connectUSB').className = 'bg-green-600 text-white px-4 py-2 rounded-lg';
+    } else {
+      alert('WebUSB not supported');
+    }
+  } catch (error) {
+    alert('USB connection failed: ' + error.message);
+  }
+}
+
+// Transaction Management
+function createTransaction() {
+  const amount = document.getElementById('sendAmount').value;
+  const address = document.getElementById('sendAddress').value;
+  if (!amount || !address) return alert('Enter amount and recipient');
+  pendingTransaction = {
+    id: 'tx_' + Date.now(),
+    amount,
+    to: address,
+    from: userData.walletAddress,
+    network: userData.network,
+    status: 'pending',
+    created: new Date().toISOString()
+  };
+  alert('Transaction created: ' + pendingTransaction.id);
+}
+
+function signTransaction() {
+  if (!pendingTransaction) return alert('No transaction to sign');
+  pendingTransaction.status = 'signed';
+  pendingTransaction.signed = new Date().toISOString();
+  const txList = document.getElementById('transactionList');
+  const txElement = document.createElement('div');
+  txElement.className = 'flex justify-between items-center p-3 bg-green-50 rounded-lg border border-green-200';
+  txElement.innerHTML = `
+    <span class="font-mono text-sm">${pendingTransaction.id}</span>
+    <span class="text-sm text-green-600">${pendingTransaction.amount} PI</span>
+    <span class="text-xs text-green-500">Signed</span>
+  `;
+  txList.insertBefore(txElement, txList.firstChild);
+  pendingTransaction = null;
+  alert('Transaction signed');
+}
+
+function denyTransaction() {
+  if (!pendingTransaction) return alert('No transaction to deny');
+  alert('Transaction denied: ' + pendingTransaction.id);
+  pendingTransaction = null;
+}
+
+function saveTransactions() {
+  const txElements = document.querySelectorAll('#transactionList > div');
+  const transactions = Array.from(txElements).map(el => ({
+    hash: el.querySelector('.font-mono').textContent,
+    amount: el.querySelector('.text-sm').textContent,
+    date: new Date().toISOString()
+  }));
+  localStorage.setItem('3coma14_transactions', JSON.stringify(transactions));
+  alert('Transactions saved');
+}
+
+function loadTransactions() {
+  const saved = localStorage.getItem('3coma14_transactions');
+  const txList = document.getElementById('transactionList');
+  txList.innerHTML = '';
+  if (saved) {
+    const transactions = JSON.parse(saved);
+    transactions.forEach(tx => {
+      const txElement = document.createElement('div');
+      txElement.className = 'flex justify-between items-center p-3 bg-gray-50 rounded-lg';
+      txElement.innerHTML = `
+        <span class="font-mono text-sm">${tx.hash}</span>
+        <span class="text-sm text-gray-600">${tx.amount}</span>
+        <span class="text-xs text-gray-500">Loaded</span>
+      `;
+      txList.appendChild(txElement);
+    });
+    alert('Loaded ' + transactions.length + ' transactions');
+  } else {
+    alert('No saved transactions');
+  }
+}
+
+// Security
+function createPassword() {
+  const password = document.getElementById('newPassword').value;
+  if (!password) return alert('Enter a password');
+  const hashed = btoa(password);
+  localStorage.setItem('3coma14_password', hashed);
+  document.getElementById('newPassword').value = '';
+  alert('Password saved');
+}
+
+function generateQR() {
+  const qrData = `pi://${userData.walletAddress}?amount=0&memo=3coma14_wallet`;
+  const qrContainer = document.querySelector('.qr-code');
+  qrContainer.innerHTML = '';
+  new QRCode(qrContainer, {
+    text: qrData,
+    width: 128,
+    height: 128
+  });
+}
+
+// Network
+function switchNetwork() {
+  userData.network = userData.network === 'testnet' ? 'mainnet' : 'testnet';
+  document.getElementById('networkSwitch').textContent = userData.network.toUpperCase();
+  alert('Switched to ' + userData.network.toUpperCase());
+}
+
+// Clipboard
+function copyToClipboard(text) {
+  navigator.clipboard.writeText(text).then(() => {
+    alert('Address copied!');
+  });
+}
+
+// .BAT Installer
+const batchFileContent = `
+@echo off
+echo Installing 3coma14 Wallet...
+mkdir "%USERPROFILE%\\3coma14"
+copy /Y "%~dp0\\wallet\\*" "%USERPROFILE%\\3coma14\\"
+echo Done!
+pause
+`;
+
+function downloadBatchInstaller() {
+  const blob = new Blob([batchFileContent], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = '3coma14-install.bat';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// Insert .BAT button
+const downloadBtn = document.createElement('button');
+downloadBtn.textContent = 'Download .BAT Installer';
+downloadBtn.className = 'bg-orange-600 text-white px-4 py-2 rounded-lg hover:bg-orange-700 ml-2';
+downloadBtn.onclick = downloadBatchInstaller;
+document.querySelector('header').appendChild(downloadBtn);
+
+// Event Listeners
+document.getElementById('connectUSB').addEventListener('click', connectUSBDevice);
+document.getElementById('networkSwitch').addEventListener('click', switchNetwork);
+</script>
+<script>
+document.getElementById('nftUploader').addEventListener('change', async function(event) {
+  const file = event.target.files[0];
+  if (!file) return alert('No file selected');
+
+  const reader = new FileReader();
+  reader.onload = async function(e) {
+    try {
+      const nftJson = e.target.result;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(nftJson);
+
+      // Conectar al USB
+      const device = await navigator.usb.requestDevice({ filters: [{ vendorId: 0x1234 }] });
+      await device.open();
+      await device.selectConfiguration(1);
+      await device.claimInterface(0);
+
+      // Enviar al USB
+      await device.transferOut(1, data);
+      alert('NFT uploaded to USB successfully');
+    } catch (err) {
+      console.error('Upload failed:', err);
+      alert('Failed to upload NFT: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+});
+</script>
+<script>
+async function loadNFTsFromUSB() {
+  try {
+    const dirHandle = await window.showDirectoryPicker();
+    const gallery = document.querySelector('.grid.grid-cols-3');
+    gallery.innerHTML = ''; // Limpiar galería
+
+    for await (const entry of dirHandle.values()) {
+      if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+        const file = await entry.getFile();
+        const text = await file.text();
+        const nft = JSON.parse(text);
+
+        const div = document.createElement('div');
+        div.className = 'relative group cursor-pointer';
+        div.innerHTML = `
+          <img src="${nft.image}" alt="${nft.name}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+          <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+            <span class="text-white text-sm">${nft.name}</span>
+          </div>
+        `;
+        gallery.appendChild(div);
+      }
+    }
+
+    alert('NFTs loaded from USB');
+  } catch (error) {
+    console.error('Error loading NFTs from USB:', error);
+    alert('Failed to load NFTs from USB');
+  }
+}
+
+// Ejecutar al cargar la página
+window.addEventListener('load', () => {
+  const gallerySection = document.querySelector('.grid.grid-cols-3');
+  if (gallerySection) {
+    const loadBtn = document.createElement('button');
+    loadBtn.textContent = 'Load NFTs from USB';
+    loadBtn.className = 'mt-4 bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700';
+    loadBtn.onclick = loadNFTsFromUSB;
+    gallerySection.parentElement.insertBefore(loadBtn, gallerySection);
+  }
+});
+</script>
+
+<script>
+async function updateBalances() {
+  // 1. Balance desde coma4883.pinet.com (si está disponible)
+  try {
+    const res = await fetch('https://coma4883.pinet.com/api/wallet/connect');
+    const data = await res.json();
+    document.querySelector('#walletBalance').textContent = `${data.balance} PI`;
+  } catch (err) {
+    console.warn('No se pudo conectar al backend online');
+    document.querySelector('#walletBalance').textContent = 'Offline';
+  }
+
+  // 2. Balance desde NFTs almacenados en USB
+  try {
+    const dirHandle = await window.showDirectoryPicker();
+    let totalNFTValue = 0;
+    const gallery = document.querySelector('.grid.grid-cols-3');
+    gallery.innerHTML = ''; // Limpiar galería
+
+    for await (const entry of dirHandle.values()) {
+      if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+        const file = await entry.getFile();
+        const text = await file.text();
+        const nft = JSON.parse(text);
+        totalNFTValue += parseFloat(nft.price || 0);
+
+        const div = document.createElement('div');
+        div.className = 'relative group cursor-pointer';
+        div.innerHTML = `
+          <img src="${nft.image}" alt="${nft.name}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+          <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+            <span class="text-white text-sm">${nft.name}</span>
+          </div>
+        `;
+        gallery.appendChild(div);
+      }
+    }
+
+    document.querySelector('#galleryBalance').textContent = `${totalNFTValue.toFixed(2)} PI`;
+  } catch (error) {
+    console.error('Error al cargar NFTs desde USB:', error);
+    document.querySelector('#galleryBalance').textContent = '0 PI';
+  }
+}
+
+// Ejecutar al cargar la página
+window.addEventListener('load', () => {
+  updateBalances();
+});
+</script>
+<script>
+async function loadNFTsFromUSB() {
+  try {
+    const dirHandle = await window.showDirectoryPicker(); // El usuario selecciona la carpeta USB
+    const gallery = document.querySelector('.grid.grid-cols-3');
+    gallery.innerHTML = '';
+    let totalNFTValue = 0;
+
+    for await (const entry of dirHandle.values()) {
+      if (entry.kind === 'file' && entry.name.endsWith('.json')) {
+        const file = await entry.getFile();
+        const text = await file.text();
+        const nft = JSON.parse(text);
+        totalNFTValue += parseFloat(nft.price || 0);
+
+        const div = document.createElement('div');
+        div.className = 'relative group cursor-pointer';
+        div.innerHTML = `
+          <img src="${nft.image}" alt="${nft.name}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+          <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+            <span class="text-white text-sm">${nft.name}</span>
+          </div>
+        `;
+        gallery.appendChild(div);
+      }
+    }
+
+    document.querySelector('#galleryBalance').textContent = `${totalNFTValue.toFixed(2)} PI`;
+  } catch (error) {
+    console.error('Error al cargar NFTs desde USB:', error);
+    document.querySelector('#galleryBalance').textContent = '0 PI';
+  }
+}
+
+async function updateWalletBalance() {
+  try {
+    const res = await fetch('https://coma4883.pinet.com/api/wallet/connect');
+    const data = await res.json();
+    document.querySelector('#walletBalance').textContent = `${data.balance} PI`;
+    document.querySelector('#networkLabel').textContent = data.network.toUpperCase();
+  } catch (err) {
+    console.warn('No se pudo conectar al backend online');
+    document.querySelector('#walletBalance').textContent = 'Offline';
+  }
+}
+
+window.addEventListener('load', () => {
+  updateWalletBalance();
+});
+</script>
+<script>
+async function syncProfileFromBackend() {
+  try {
+    const res = await fetch('https://coma4883.pinet.com/api/wallet/connect');
+    const data = await res.json();
+
+    // Actualizar nombre de usuario
+    document.querySelector('#username').textContent = data.username;
+
+    // Actualizar balance
+    document.querySelector('#walletBalance').textContent = `${data.balance} PI`;
+
+    // Actualizar red
+    document.querySelector('#networkLabel').textContent = data.network.toUpperCase();
+
+    // Actualizar dirección si la tienes en pantalla
+    document.querySelector('#walletAddress').textContent = data.walletAddress;
+  } catch (err) {
+    console.warn('No se pudo conectar al backend');
+    document.querySelector('#walletBalance').textContent = 'Offline';
+  }
+}
+
+window.addEventListener('load', () => {
+  syncProfileFromBackend();
+});
+</script>
+
+<script>
+async function syncWalletFromLocalAPI() {
+  try {
+    const res = await fetch('http://localhost:3001/api/wallet/connect');
+    const data = await res.json();
+
+    // Actualizar perfil
+    document.querySelector('#username').textContent = data.address;
+    document.querySelector('#walletBalance').textContent = data.balance;
+    document.querySelector('#networkLabel').textContent = data.network;
+
+    // Actualizar galería
+    const gallery = document.querySelector('.grid.grid-cols-3');
+    gallery.innerHTML = '';
+    let totalNFTValue = 0;
+
+    data.nfts.forEach(nft => {
+      totalNFTValue += parseFloat(nft.price || 0); // Si el campo "price" existe
+
+      const div = document.createElement('div');
+      div.className = 'relative group cursor-pointer';
+      div.innerHTML = `
+        <img src="${nft.image}" alt="${nft.name}" class="w-full h-24 object-cover rounded-lg border-2 border-gray-200 hover:border-blue-500">
+        <div class="absolute inset-0 bg-black bg-opacity-50 opacity-0 group-hover:opacity-100 rounded-lg flex items-center justify-center">
+          <span class="text-white text-sm">${nft.name}</span>
+        </div>
+      `;
+      gallery.appendChild(div);
+    });
+
+    // Actualizar balance de galería si hay precios
+    if (document.querySelector('#galleryBalance')) {
+      document.querySelector('#galleryBalance').textContent = `${totalNFTValue.toFixed(2)} PI`;
+    }
+
+  } catch (error) {
+    console.error('Error al sincronizar con el backend local:', error);
+    document.querySelector('#walletBalance').textContent = 'Offline';
+  }
+}
+
+window.addEventListener('load', () => {
+  syncWalletFromLocalAPI();
+});
+</script>
+<script type="text/javascript">
+let pendingTransaction = null
+
+async function updateBalance() {
+  try {
+    const res = await fetch('http://localhost:3001/api/wallet/connect', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' }
+    })
+    const data = await res.json()
+    const cleanBalance = data.balance?.replace(' PI', '') || '0'
+    document.getElementById('walletBalance').textContent = cleanBalance + ' PI'
+    document.getElementById('walletAddress').textContent = data.address
+    window.userData = data
+  } catch (err) {
+    console.warn('No se pudo actualizar el balance:', err)
+  }
+}
+
+setInterval(updateBalance, 2000)
+updateBalance()
+
+function createTransaction() {
+  pendingTransaction = {
+    id: 'tx_' + Math.random().toString(36).substr(2, 6),
+    amount: '10',
+    toAddress: userData.address,
+    status: 'Created'
+  }
+  alert('✅ Transacción creada: ' + pendingTransaction.id)
+  document.getElementById('sendButton').style.display = 'inline-block'
+}
+
+function signTransaction() {
+  if (!pendingTransaction) return alert('⚠️ No hay transacción pendiente')
+  pendingTransaction.status = 'Signed'
+  alert('✍️ Transacción firmada: ' + pendingTransaction.id)
+}
+
+async function sendTransaction() {
+  if (!pendingTransaction || pendingTransaction.status !== 'Signed') {
+    return alert('⚠️ Firma la transacción antes de enviar')
+  }
+
+  try {
+    const res = await fetch('http://localhost:3001/api/wallet/send', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        amount: pendingTransaction.amount,
+        toAddress: pendingTransaction.toAddress,
+        network: userData.network
+      })
+    })
+    const result = await res.json()
+    pendingTransaction.status = 'Sent'
+    pendingTransaction.txHash = result.txHash
+    alert('🚀 Transacción enviada: ' + result.txHash)
+    updateBalance()
+    saveTransactionToUSB()
+  } catch (err) {
+    alert('❌ Error al enviar transacción')
+  }
+}
+
+function saveTransactionToUSB() {
+  const text = `
+ID: ${pendingTransaction.id}
+Amount: ${pendingTransaction.amount}
+To: ${pendingTransaction.toAddress}
+Status: ${pendingTransaction.status}
+Hash: ${pendingTransaction.txHash}
+Wallet: ${userData.address}
+Time: ${new Date().toLocaleString()}
+-----------------------------
+`
+  const blob = new Blob([text], { type: 'text/plain' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'transactions.txt'
+  a.click()
+}
+</script>
+<script>
+let pendingTransaction = null
+
+async function updateBalance() {
+  try {
+    const res = await fetch('http://localhost:3001/api/wallet/connect')
+    const data = await res.json()
+    const cleanBalance = data.balance?.replace(' PI', '') || '0'
+    document.getElementById('walletBalance').textContent = cleanBalance + ' PI'
+    document.getElementById('walletAddress').textContent = data.address
+    window.userData = data
+  } catch (err) {
+    console.warn('No se pudo actualizar el balance:', err)
+  }
+}
+
+setInterval(updateBalance, 2000)
+updateBalance()
+
+function createTransaction() {
+  pendingTransaction = {
+    transactionId: 'tx_' + Math.random().toString(36).substr(2, 6),
+    from: userData.address,
+    to: userData.address,
+    amount: 10,
+    memo: 'Transferencia local',
+    network: userData.network,
+    status: 'Created'
+  }
+  alert('✅ Transacción creada: ' + pendingTransaction.transactionId)
+  document.getElementById('sendButton').style.display = 'inline-block'
+}
+
+function signTransaction() {
+  if (!pendingTransaction) return alert('⚠️ No hay transacción pendiente')
+  pendingTransaction.status = 'Signed'
+  alert('✍️ Transacción firmada: ' + pendingTransaction.transactionId)
+}
+
+async function sendTransaction() {
+  if (!pendingTransaction || pendingTransaction.status !== 'Signed') {
+    return alert('⚠️ Firma la transacción antes de enviar')
+  }
+
+  try {
+    const res = await fetch('http://localhost:3001/api/signed-transfer', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(pendingTransaction)
+    })
+    const result = await res.json()
+    alert(result.message || '✅ Transacción enviada')
+    updateBalance()
+    saveTransactionToUSB()
+  } catch (err) {
+    alert('❌ Error al enviar transacción')
+    console.error(err)
+  }
+}
+
+function saveTransactionToUSB() {
+  const text = `
+ID: ${pendingTransaction.transactionId}
+De: ${pendingTransaction.from}
+A: ${pendingTransaction.to}
+Monto: ${pendingTransaction.amount} PI
+Memo: ${pendingTransaction.memo}
+Red: ${pendingTransaction.network}
+Estado: ${pendingTransaction.status}
+Fecha: ${new Date().toLocaleString()}
+-----------------------------
+`
+  const blob = new Blob([text], { type: 'text/plain' })
+  const a = document.createElement('a')
+  a.href = URL.createObjectURL(blob)
+  a.download = 'transaccion-' + pendingTransaction.transactionId + '.txt'
+  a.click()
+}
+</script>
+
+
+
+
+</body>
+</html>
